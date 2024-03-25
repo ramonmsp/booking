@@ -21,7 +21,7 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
 
   const handleMenuClick = React.useCallback(
     (item: MenuItemType) => {
-      router.push(`/${item.key}`);
+      router.push(`/${item.key}`, { scroll: true });
     },
     [router],
   );
@@ -55,7 +55,9 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
           </Layout.Header>
 
           <Layout.Content style={styles.content}>{children}</Layout.Content>
-          <Layout.Footer style={styles.layout.footer}>Booking App - All rights reserved © 2024</Layout.Footer>
+          <Layout.Footer style={styles.layout.footer}>
+            Booking App - All rights reserved © 2024
+          </Layout.Footer>
         </Layout>
       </body>
     </html>

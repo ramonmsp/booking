@@ -60,7 +60,7 @@ const useStyles = (): StylesType => {
         },
       },
       content: {
-        padding: '0 48px',
+        padding: 48,
         minHeight: 'calc(100vh - 110px)',
       },
       container: {
