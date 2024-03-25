@@ -11,24 +11,29 @@
     "format:fix": "prettier -w ."
   },
   "dependencies": {
+    "@ant-design/icons": "^4.8.3",
     "antd": "^5.15.3",
-    "next": "14.1.4",
-    "react": "^18",
-    "react-dom": "^18"
+    "antd-zod": "^5.1.0",
+    "dayjs": "^1.11.10",
+    "next": "^14.1.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@ant-design/nextjs-registry": "^1.0.0",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/node": "^20.11.30",
+    "@types/react": "^18.2.69",
+    "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
     "cspell": "^8.6.0",
-    "eslint": "^8",
+    "eslint": "^8.57.0",
     "eslint-config-next": "14.1.4",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "prettier": "^3.2.5",
-    "typescript": "^5"
+    "styled-jsx": "^5.1.2",
+    "typescript": "^5.4.3"
   }
 }
