@@ -3,14 +3,15 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import BookingForm, {
   DatePickedRange,
-} from '@/app/components/booking_form/page';
+} from '@/app/components/booking_form/booking_form';
 import { createBooking, getBookings, getPlaceById } from '@/app/utils/requests';
 import { Booking } from '@/app/lib/mocks/booking';
 import { Place } from '@/app/lib/mocks/places';
+import { Dayjs } from 'dayjs';
 
 export type DateRange = {
-  start: Date;
-  end: Date;
+  start: Date | Dayjs;
+  end: Date | Dayjs;
 };
 
 export type BookDate = {

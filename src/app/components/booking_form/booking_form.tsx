@@ -1,12 +1,10 @@
 'use client';
-import { Modal } from 'antd';
+import { Button, DatePicker, Form, Modal } from 'antd';
 import React from 'react';
-import { Button, DatePicker, Form } from 'antd';
-import { Booking } from '@/app/lib/mocks/booking';
-import { z } from 'zod';
 import { isOverlapping } from '@/app/utils/date';
 import { DateRange } from '@/app/bookings/new/[placeId]/page';
 import dayjs from 'dayjs';
+import { Booking } from '@/app/lib/mocks/booking';
 
 export type DatePickedRange = {
   bookingDates: DateRange[];
@@ -14,29 +12,14 @@ export type DatePickedRange = {
 
 interface BookingFormProps {
   bookings: Booking[];
-  placeToBook: Partial<Booking>;
-  onCancel: () => void;
-  onFinish: (values: DatePickedRange) => void;
   open: boolean;
   handleOpen: (open: boolean) => void;
   submitButtonLabel?: string;
   modalTitle?: string;
+  onCancel: () => void;
+  onFinish: (values: DatePickedRange) => void;
+  placeToBook: Partial<Booking>;
 }
-
-const schema = (bookingsDate: DateRange[]) => {
-  return z.object({
-    bookingDates: z.tuple([z.date(), z.date()]).refine(
-      ([start, end]) => {
-        const current = { start, end };
-        const hasOverlaps = bookingsDate.some((other) =>
-          isOverlapping(current, other),
-        );
-        return !hasOverlaps;
-      },
-      { message: 'There is an overlap with another Booking' },
-    ),
-  });
-};
 
 const BookingForm = ({
   placeToBook,
@@ -57,28 +40,34 @@ const BookingForm = ({
       span: 24,
     },
   };
-  const [form] = Form.useForm();
   const { place } = placeToBook;
-
+  const [form] = Form.useForm();
   React.useEffect(() => {
     handleOpen(true);
   }, [handleOpen]);
 
   const initialValues = React.useMemo(() => {
     return {
-      bookingDates: [
-        dayjs(placeToBook.start),
-        dayjs(placeToBook.end),
-      ],
+      bookingDates:
+        placeToBook.start && placeToBook.end
+          ? [dayjs(placeToBook.start), dayjs(placeToBook.end)]
+          : [],
     };
   }, [placeToBook.start, placeToBook.end]);
 
   React.useEffect(() => {
-    form.setFieldsValue(initialValues);
+    form?.setFieldsValue(initialValues);
   }, [initialValues, form]);
 
   return (
-    <Modal title={modalTitle} open={open} onCancel={onCancel} footer={null}>
+    <Modal
+      title={modalTitle}
+      open={open}
+      onCancel={onCancel}
+      footer={null}
+      data-testid="form-modal"
+      forceRender
+    >
       <Form
         {...formItemLayout}
         form={form}
@@ -99,19 +88,25 @@ const BookingForm = ({
                   );
                 }
 
-                try {
-                  await schema(bookings).parseAsync({
-                    bookingDates: value.map((date) => new Date(date)),
-                  });
-                  return Promise.resolve();
-                } catch (error) {
-                  return Promise.reject(error as Error);
+                const start = new Date(value[0]);
+                const end = new Date(value[1]);
+
+                const hasOverlaps = bookings.some((booking) => {
+                  const current = { start, end };
+                  return isOverlapping(current, booking);
+                });
+
+                if (hasOverlaps) {
+                  return Promise.reject(
+                    'Place is not available in these dates',
+                  );
                 }
+                return Promise.resolve();
               },
             },
           ]}
         >
-          <RangePicker minDate={dayjs()}/>
+          <RangePicker minDate={dayjs()} data-testid="booking-dates" />
         </Form.Item>
 
         <Form.Item
@@ -120,7 +115,7 @@ const BookingForm = ({
             sm: { offset: 17, span: 20 },
           }}
         >
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" data-testid="submit-button">
             {submitButtonLabel}
           </Button>
         </Form.Item>

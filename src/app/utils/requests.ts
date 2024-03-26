@@ -1,4 +1,4 @@
-import { DatePickedRange } from "../components/booking_form/page";
+import { DatePickedRange } from "../components/booking_form/booking_form";
 
 const BASE_URL = 'http://localhost:3000/api';
 

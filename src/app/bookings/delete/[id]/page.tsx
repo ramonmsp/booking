@@ -1,5 +1,5 @@
 'use client';
-import { DeleteConfirmation } from '@/app/components/delete_confirmation/page';
+import { DeleteConfirmation } from '@/app/components/delete_confirmation/delete_confirmation';
 import { Booking } from '@/app/lib/mocks/booking';
 import { deleteBooking, getBookingById } from '@/app/utils/requests';
 import { useRouter } from 'next/navigation';

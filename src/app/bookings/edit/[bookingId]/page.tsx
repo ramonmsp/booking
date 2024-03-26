@@ -1,9 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import BookingForm, {
-  DatePickedRange,
-} from '@/app/components/booking_form/page';
+import BookingForm, { DatePickedRange } from '@/app/components/booking_form/booking_form';
 import { editBooking, getBookings } from '@/app/utils/requests';
 import { Booking } from '@/app/lib/mocks/booking';
 
