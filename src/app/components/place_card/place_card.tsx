@@ -23,6 +23,7 @@ export const PlaceCard = ({ place }: PlaceCardProps) => {
           </Link>
         </div>,
       ]}
+      data-testid="place-card"
     >
       <Card.Meta
         title={place.location}
