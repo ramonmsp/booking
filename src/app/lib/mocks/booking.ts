@@ -1,11 +1,12 @@
 import { DateRange } from '@/app/bookings/new/[placeId]/page';
 import { Place } from './places';
+import { Dayjs } from 'dayjs';
 
 export interface Booking {
   id?: string;
   place: Place;
-  start: Date;
-  end: Date;
+  start: Date | Dayjs;
+  end: Date | Dayjs;
 }
 
 export const allBookings = new Map<string, Booking>();
@@ -18,8 +19,8 @@ export function getById(id: string) {
   return allBookings.get(id);
 }
 
-export function create(booking: Booking) {
-  allBookings.set(booking.id!, booking);
+export function create(id: string, booking: Booking) {
+  allBookings.set(id!, booking);
 }
 
 export function editById(id: string, newDates: DateRange) {
