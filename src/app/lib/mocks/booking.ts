@@ -1,10 +1,10 @@
-import { DateRange } from '@/app/bookings/new/[placeId]/page';
-import { Place } from './places';
+import { DateRange } from '@/app/bookings/new/[propertyId]/page';
+import { Property } from './properties';
 import { Dayjs } from 'dayjs';
 
 export interface Booking {
   id?: string;
-  place: Place;
+  property: Property;
   start: Date | Dayjs;
   end: Date | Dayjs;
 }
@@ -25,7 +25,6 @@ export function create(id: string, booking: Booking) {
 
 export function editById(id: string, newDates: DateRange) {
   const booking = allBookings.get(id);
-
   if (!booking) {
     throw new Error('Booking not found');
   }

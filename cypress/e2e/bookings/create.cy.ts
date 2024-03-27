@@ -16,9 +16,9 @@ describe('create booking flow', () => {
     deleteAllBookings(BASE_URL);
 
     cy.visit(`${BASE_URL}`);
-    cy.contains('Places').click();
-    cy.contains('Places').click();
-    cy.contains('Book this place').click();
+    cy.contains('Properties').click();
+    cy.contains('Properties').click();
+    cy.contains('Book this property').click();
 
     cy.get('.ant-picker-range').click();
     cy.get('.ant-picker-panel-container').within(() => {
@@ -33,15 +33,15 @@ describe('create booking flow', () => {
 
   it('should not booking when dates are overlapped', () => {
     cy.visit(`${BASE_URL}`);
-    cy.contains('Places').click();
-    cy.contains('Places').click();
-    cy.contains('Book this place').click();
+    cy.contains('Properties').click();
+    cy.contains('Properties').click();
+    cy.contains('Book this property').click();
 
     cy.get('.ant-picker-range').click();
     cy.get('.ant-picker-panel-container').within(() => {
       cy.get('[title="2024-04-16"]').click();
       cy.get('[title="2024-04-20"]').click();
     });
-    cy.contains('div', 'Place is not available in these dates').should('be.visible');
+    cy.contains('div', 'Property is not available in these dates').should('be.visible');
   });
 });

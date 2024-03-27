@@ -1,13 +1,13 @@
 import { Booking } from "@/app/lib/mocks/booking";
-import { Place } from "@/app/lib/mocks/places";
+import { Property } from "@/app/lib/mocks/properties";
 
-export const generatePlace = (place: Partial<Place> = {}): Place => {
+export const generateProperty = (property: Partial<Property> = {}): Property => {
   return {
     id: '1',
     location: '',
     description: 'Lorem ipsum',
     imageUrl: '',
-    ...place,
+    ...property,
   };
 };
 
@@ -16,7 +16,7 @@ export const generateBooking = (booking: Partial<Booking> = {}): Booking => {
     id: '1',
     start: new Date(),
     end: new Date(),
-    place: generatePlace(),
+    property: generateProperty(),
     ...booking,
   };
 };

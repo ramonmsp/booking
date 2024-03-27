@@ -10,7 +10,7 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
   const styles = useStyles();
 
-  const itemsLabel: string[] = ['Places', 'Bookings'];
+  const itemsLabel: string[] = ['Properties', 'Bookings'];
 
   const items = new Array(2).fill(null).map((_, index) => ({
     key: itemsLabel[index].toLocaleLowerCase(),

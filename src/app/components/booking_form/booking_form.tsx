@@ -2,7 +2,7 @@
 import { Button, DatePicker, Form, Modal } from 'antd';
 import React from 'react';
 import { isOverlapping } from '@/app/utils/date';
-import { DateRange } from '@/app/bookings/new/[placeId]/page';
+import { DateRange } from '@/app/bookings/new/[propertyId]/page';
 import dayjs from 'dayjs';
 import { Booking } from '@/app/lib/mocks/booking';
 
@@ -18,11 +18,11 @@ interface BookingFormProps {
   modalTitle?: string;
   onCancel: () => void;
   onFinish: (values: DatePickedRange) => void;
-  placeToBook: Partial<Booking>;
+  property: Partial<Booking>;
 }
 
 const BookingForm = ({
-  placeToBook,
+  property,
   bookings,
   onCancel,
   onFinish,
@@ -48,11 +48,11 @@ const BookingForm = ({
   const initialValues = React.useMemo(() => {
     return {
       bookingDates:
-        placeToBook.start && placeToBook.end
-          ? [dayjs(placeToBook.start), dayjs(placeToBook.end)]
+        property.start && property.end
+          ? [dayjs(property.start), dayjs(property.end)]
           : [],
     };
-  }, [placeToBook?.start, placeToBook?.end]);
+  }, [property?.start, property?.end]);
 
   React.useEffect(() => {
     form?.setFieldsValue(initialValues);
@@ -75,7 +75,7 @@ const BookingForm = ({
         style={{ maxWidth: 600 }}
       >
         <Form.Item
-          label={`Check-in and Check-out dates to ${placeToBook.place?.location}`}
+          label={`Check-in and Check-out dates to ${property.property?.location}`}
           name="bookingDates"
           initialValue={initialValues.bookingDates}
           rules={[
@@ -97,7 +97,7 @@ const BookingForm = ({
 
                 if (hasOverlaps) {
                   return Promise.reject(
-                    'Place is not available in these dates',
+                    'Property is not available in these dates',
                   );
                 }
                 return Promise.resolve();
@@ -105,7 +105,7 @@ const BookingForm = ({
             },
           ]}
         >
-          <RangePicker minDate={dayjs()} data-testid="booking-dates" />
+          <RangePicker minDate={dayjs()} getPopupContainer={trigger => trigger.parentElement!} data-testid="booking-dates" />
         </Form.Item>
 
         <Form.Item

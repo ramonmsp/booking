@@ -5,7 +5,7 @@ describe('homepage', () => {
     cy.get('h1').contains('Welcome to Booking App').should('be.visible');
     cy.get('h4').contains('Booking App').should('be.visible');
 
-    cy.get('span').contains('Places').should('be.visible');
+    cy.get('span').contains('Properties').should('be.visible');
     cy.get('span').contains('Bookings').should('be.visible');
   });
 });

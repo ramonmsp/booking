@@ -1,4 +1,4 @@
-import { getAll } from "@/app/lib/mocks/places";
+import { getAll } from "@/app/lib/mocks/properties";
 import { NextResponse } from "next/server";
 
 export async function GET() {

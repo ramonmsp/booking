@@ -17,7 +17,7 @@ export const DeleteConfirmation = ({
   onCancel,
   onOk,
 }: DeleteConfirmationProps) => {
-  const { place } = booking;
+  const { property } = booking;
   React.useEffect(() => {
     handleOpen(true);
   }, [handleOpen]);
@@ -32,7 +32,7 @@ export const DeleteConfirmation = ({
     >
       <Typography.Text>
         Are you sure you want to delete your reservation at{' '}
-        <Typography.Text strong>{place?.location}?</Typography.Text>
+        <Typography.Text strong>{property?.location}?</Typography.Text>
       </Typography.Text>
     </Modal>
   );

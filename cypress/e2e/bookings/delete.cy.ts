@@ -14,7 +14,6 @@ describe('delete booking flow', () => {
 
     cy.get('.ant-table-row').contains('March 27, 2024').should('be.visible');
     cy.get('a[href="bookings/delete/1"]').click();
-    cy.contains('Delete').click();
 
     cy.get('.ant-modal-content').within(() => {
       cy.get('.ant-modal-footer button').contains('OK').click();

@@ -25,7 +25,7 @@ const EditBooking = ({ params }: EditBookingProps) => {
   const router = useRouter();
   const { bookingId } = params;
 
-  const [placeToBook, setPlaceToBook] = React.useState<
+  const [property, setProperty] = React.useState<
     Booking | NonNullable<unknown>
   >({});
   const [bookings, setBookings] = React.useState<Booking[]>([]);
@@ -38,7 +38,7 @@ const EditBooking = ({ params }: EditBookingProps) => {
           ({ bookingId }: { bookingId: string }) => bookingId === bookingId,
         );
 
-        setPlaceToBook(booking);
+        setProperty(booking);
         setBookings(
           bookings.filter(({ id }: { id: string }) => id !== bookingId),
         );
@@ -48,7 +48,7 @@ const EditBooking = ({ params }: EditBookingProps) => {
     };
 
     fetchData();
-  }, [bookingId, setPlaceToBook, setBookings]);
+  }, [bookingId, setProperty, setBookings]);
 
   const handleOpen = React.useCallback((open: boolean) => {
     setOpen(open);
@@ -67,7 +67,7 @@ const EditBooking = ({ params }: EditBookingProps) => {
 
   return (
     <BookingForm
-      placeToBook={placeToBook!}
+      property={property!}
       bookings={bookings ?? []}
       onCancel={handleCancel}
       onFinish={onFinish}

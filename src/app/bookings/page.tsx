@@ -24,10 +24,10 @@ const BookingsPage: React.FC = () => {
 
   const columns: TableProps['columns'] = [
     {
-      title: 'Place',
-      dataIndex: 'place',
-      key: 'place',
-      render: (place: Booking['place']) => place.location,
+      title: 'Property',
+      dataIndex: 'property',
+      key: 'property',
+      render: (property: Booking['property']) => property.location,
     },
     {
       title: 'Check-in',

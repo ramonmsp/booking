@@ -1,36 +1,36 @@
 import React from 'react';
 import { Button, Card, Typography } from 'antd';
-import { Place } from '@/app/lib/mocks/places';
+import { Property } from '@/app/lib/mocks/properties';
 import useStyles from './use_styles';
 import Link from 'next/link';
 
-interface PlaceCardProps {
-  place: Place;
+interface PropertyCardProps {
+  property: Property;
 }
-export const PlaceCard = ({ place }: PlaceCardProps) => {
+export const PropertyCard = ({ property }: PropertyCardProps) => {
   const styles = useStyles();
 
   return (
     <Card
       hoverable
-      cover={<img alt="example" src={place.imageUrl} />}
+      cover={<img alt="example" src={property.imageUrl} />}
       actions={[
         <div style={styles.container}>
-          <Link href={`bookings/new/${place.id}`}>
+          <Link href={`bookings/new/${property.id}`}>
             <Button type="primary" block>
-              Book this place{' '}
+              Book this property{' '}
             </Button>
           </Link>
         </div>,
       ]}
-      data-testid="place-card"
+      data-testid="property-card"
     >
       <Card.Meta
-        title={place.location}
+        title={property.location}
         description={
           <div>
-            <Typography.Text ellipsis={{ tooltip: place.description }}>
-              {place.description}
+            <Typography.Text ellipsis={{ tooltip: property.description }}>
+              {property.description}
             </Typography.Text>
           </div>
         }

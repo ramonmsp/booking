@@ -4,9 +4,12 @@ import { useRouter } from 'next/navigation';
 import BookingForm, {
   DatePickedRange,
 } from '@/app/components/booking_form/booking_form';
-import { createBooking, getBookings, getPlaceById } from '@/app/utils/requests';
+import {
+  createBooking,
+  getBookings,
+  getPropertyById,
+} from '@/app/utils/requests';
 import { Booking } from '@/app/lib/mocks/booking';
-import { Place } from '@/app/lib/mocks/places';
 import { Dayjs } from 'dayjs';
 
 export type DateRange = {
@@ -20,24 +23,23 @@ export type BookDate = {
 
 type NewBookingProps = {
   params: {
-    placeId: string;
+    propertyId: string;
   };
 };
 
 const NewBooking = ({ params }: NewBookingProps) => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
-  const { placeId } = params;
+  const { propertyId } = params;
 
-  const [placeToBook, setPlaceToBook] = React.useState<Partial<Booking>>({});
+  const [property, setProperty] = React.useState<Partial<Booking>>({});
   const [bookings, setBookings] = React.useState<Booking[]>([]);
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const placeData = await getPlaceById(placeId);
-        setPlaceToBook(placeData);
-
+        const propertyData = await getPropertyById(propertyId);
+        setProperty(propertyData);
 
         const bookingsData = await getBookings();
         setBookings(bookingsData);
@@ -47,9 +49,9 @@ const NewBooking = ({ params }: NewBookingProps) => {
     };
 
     fetchData();
-  }, [placeId, setPlaceToBook, setBookings]);
+  }, [setBookings, propertyId]);
 
-  const place = {place: placeToBook as Place}
+  const propertyData = { property: property } as Partial<Booking>;
 
   const handleOpen = React.useCallback((open: boolean) => {
     setOpen(open);
@@ -61,14 +63,14 @@ const NewBooking = ({ params }: NewBookingProps) => {
   }, [router]);
 
   const onFinish = (values: DatePickedRange) => {
-    createBooking(values, placeId);
+    createBooking(values, propertyId);
     setOpen(false);
     router.push('/bookings');
   };
 
   return (
     <BookingForm
-      placeToBook={place}
+      property={propertyData}
       bookings={bookings ?? []}
       onCancel={handleCancel}
       onFinish={onFinish}

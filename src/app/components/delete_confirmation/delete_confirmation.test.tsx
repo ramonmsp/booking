@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { generateBooking, generatePlace } from '@/test/helpers/factories';
+import { generateBooking, generateProperty } from '@/test/helpers/factories';
 import { DeleteConfirmation } from './delete_confirmation';
 import { Booking } from '@/app/lib/mocks/booking';
 
@@ -7,8 +7,8 @@ describe('components/DeleteConfirmation', () => {
   let booking: Booking;
 
   beforeAll(() => {
-    const place = generatePlace({ location: 'Location' });
-    booking = generateBooking({ place });
+    const property = generateProperty({ location: 'Location' });
+    booking = generateBooking({ property });
   });
 
   it('should render delete modal correctly', () => {

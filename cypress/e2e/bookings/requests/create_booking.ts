@@ -5,7 +5,7 @@ export const createBooking = (BASE_URL: string) => {
       method: 'POST',
       body: {
 				id: '1',
-        place: {
+        property: {
           id: '1',
           name: 'Salvador',
           description: 'Salvador is a city in Brazil',

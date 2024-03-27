@@ -2,14 +2,14 @@ import { DatePickedRange } from "../components/booking_form/booking_form";
 
 const BASE_URL = 'http://localhost:3000/api';
 
-//place
-export async function getPlaces() {
-  const response = await fetch(`${BASE_URL}/places`);
+//property
+export async function getProperties() {
+  const response = await fetch(`${BASE_URL}/properties`);
   return response.json();
 }
 
-export async function getPlaceById(id: string) {
-    const response = await fetch(`${BASE_URL}/places/${id}`);
+export async function getPropertyById(id: string) {
+    const response = await fetch(`${BASE_URL}/properties/${id}`);
     return response.json();
   }
 
@@ -25,11 +25,11 @@ export async function getBookingById(id: string) {
   return response.json();
 }
 
-export async function createBooking(dates: DatePickedRange, placeId: string) {
+export async function createBooking(dates: DatePickedRange, propertyId: string) {
   const [start, end] = dates.bookingDates;
-  const place = await getPlaceById(placeId);
+  const property = await getPropertyById(propertyId);
   const booking = {
-    place,
+    property,
     start,
     end,
   };

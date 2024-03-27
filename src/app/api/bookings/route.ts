@@ -1,5 +1,5 @@
 import { Booking, allBookings, create, getAll } from "@/app/lib/mocks/booking";
-import { allPlaces } from "@/app/lib/mocks/places";
+import { allProperties } from "@/app/lib/mocks/properties";
 import { NextResponse } from "next/server";
 
 export async function GET() {   
@@ -9,7 +9,7 @@ export async function GET() {
 export async function POST(request: Request) {
     const body = await request.json() as Omit<Booking, 'id'>;
     const id = `${Array.from(allBookings.values()).length + 1}`;
-    const booking = { ...body, id, place: allPlaces.get(body.place.id)! } as Booking;
+    const booking = { ...body, id, property: allProperties.get(body.property.id)! } as Booking;
 
     create(id.toString(), booking);
 
