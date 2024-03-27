@@ -1,25 +1,22 @@
 import {
-  act,
-  cleanup,
   fireEvent,
   render,
   waitFor,
+  screen,
 } from '@testing-library/react';
 import { generateBooking, generatePlace } from '@/test/helpers/factories';
 import BookingForm from './booking_form';
-import userEvent from '@testing-library/user-event';
 import dayjs from 'dayjs';
 
 describe('components/BookingForm', () => {
-  afterEach(cleanup);
-
   it('should render booking form correctly', () => {
     const place = generatePlace({
       location: 'Paris, France',
     });
+
     const booking = generateBooking({ place });
 
-    const { getByTestId } = render(
+    render(
       <BookingForm
         placeToBook={booking}
         bookings={[]}
@@ -29,7 +26,7 @@ describe('components/BookingForm', () => {
         handleOpen={() => {}}
       />,
     );
-    const formModal = getByTestId('form-modal');
+    const formModal = screen.getByTestId('form-modal');
     expect(formModal).toBeInTheDocument();
     expect(formModal).toHaveTextContent('Choose your booking dates:');
   });
@@ -40,7 +37,7 @@ describe('components/BookingForm', () => {
     });
     const booking = generateBooking({ place });
 
-    const { getByTestId } = render(
+    render(
       <BookingForm
         bookings={[]}
         open={true}
@@ -51,7 +48,7 @@ describe('components/BookingForm', () => {
       />,
     );
 
-    const formModal = getByTestId('form-modal');
+    const formModal = screen.getByTestId('form-modal');
     expect(formModal).toHaveTextContent('Paris, France');
   });
 
@@ -61,7 +58,7 @@ describe('components/BookingForm', () => {
     });
     const booking = generateBooking({ place });
 
-    const { getByPlaceholderText } = render(
+    render(
       <BookingForm
         placeToBook={booking}
         bookings={[]}
@@ -72,8 +69,8 @@ describe('components/BookingForm', () => {
       />,
     );
 
-    const startDatePicker = getByPlaceholderText('Start date');
-    const endDatePicker = getByPlaceholderText('End date');
+    const startDatePicker = screen.getByPlaceholderText('Start date');
+    const endDatePicker = screen.getByPlaceholderText('End date');
     expect(startDatePicker).toHaveValue(dayjs().format('YYYY-MM-DD'));
     expect(endDatePicker).toHaveValue(dayjs().format('YYYY-MM-DD'));
   });
@@ -93,7 +90,7 @@ describe('components/BookingForm', () => {
 
     const onFinish = jest.fn();
 
-    const { getByTestId, getByText, getAllByTestId } = render(
+    render(
       <BookingForm
         placeToBook={placeToBook}
         bookings={bookings}
@@ -104,21 +101,16 @@ describe('components/BookingForm', () => {
       />,
     );
 
-    const bookingDates = getAllByTestId('booking-dates');
+    const bookingDates = screen.getAllByTestId('booking-dates');
     const [start, end] = bookingDates;
 
-    act(() => {
-      fireEvent.change(start, { target: { value: '2024-02-01' } });
-    });
+    fireEvent.change(start, { target: { value: '2024-02-01' } });
+    fireEvent.change(end, { target: { value: '2024-02-09' } });
+    fireEvent.click(screen.getByTestId('submit-button'));
 
-    act(() => {
-      fireEvent.change(end, { target: { value: '2024-02-09' } });
-    });
-    fireEvent.click(getByTestId('submit-button'));
-
-    waitFor(() => {
+    await waitFor(() => {
       expect(
-        getByText(/Please select booking dates/),
+        screen.getByText(/Please select booking dates/),
       ).toBeInTheDocument();
     });
 

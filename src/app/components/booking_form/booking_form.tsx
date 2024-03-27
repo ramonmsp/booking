@@ -40,7 +40,6 @@ const BookingForm = ({
       span: 24,
     },
   };
-  const { place } = placeToBook;
   const [form] = Form.useForm();
   React.useEffect(() => {
     handleOpen(true);
@@ -53,7 +52,7 @@ const BookingForm = ({
           ? [dayjs(placeToBook.start), dayjs(placeToBook.end)]
           : [],
     };
-  }, [placeToBook.start, placeToBook.end]);
+  }, [placeToBook?.start, placeToBook?.end]);
 
   React.useEffect(() => {
     form?.setFieldsValue(initialValues);
@@ -76,7 +75,7 @@ const BookingForm = ({
         style={{ maxWidth: 600 }}
       >
         <Form.Item
-          label={`Check-in and Check-out dates to ${place?.location}`}
+          label={`Check-in and Check-out dates to ${placeToBook.place?.location}`}
           name="bookingDates"
           initialValue={initialValues.bookingDates}
           rules={[
