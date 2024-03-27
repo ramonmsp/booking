@@ -15,3 +15,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ status: 200, message: 'booking has been created', payload: booking });
 }
+
+export async function DELETE() {
+    allBookings.clear();
+
+    return NextResponse.json({ status: 200, message: 'bookings were deleted' });
+}
