@@ -17,28 +17,32 @@ export async function GET(req: Request, context: GetServerSidePropsContext) {
 export async function PATCH(req: Request, context: GetServerSidePropsContext) {
   const { params } = context;
   const body = await req.json();
-
+  const id = params?.id?.toString();
   try {
-    editById(params?.id as string, body);
-    return NextResponse.json({
-      status: 200,
-      statusText: 'booking has been updated',
-    });
-  } catch (error) {
+    if (id) {
+      editById(id, body);
+      return NextResponse.json({
+        status: 200,
+        statusText: 'booking has been updated',
+      });
+    } else {
       return NextResponse.error();
     }
+  } catch (error) {
+    return NextResponse.error();
+  }
 }
 
 export async function DELETE(req: Request, context: GetServerSidePropsContext) {
   const { params } = context;
 
   try {
-    deleteById(params?.id as string,);
+    deleteById(params?.id as string);
     return NextResponse.json({
       status: 200,
       statusText: 'booking has been deleted',
     });
   } catch (error) {
-      return NextResponse.error();
-    }
+    return NextResponse.error();
+  }
 }
