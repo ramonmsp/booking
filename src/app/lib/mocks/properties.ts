@@ -28,7 +28,7 @@ export const allProperties = new Map<string, Property>([
     '3',
     {
       id: '3',
-      location: 'Tokyo, Japan',
+      location: 'Marrakech, Morocco',
       description: `Marrakesh, also known as Marrakech, is one of the most fascinating and vibrant cities in Morocco, located inland at the foothills of the High Atlas Mountains.`,
       imageUrl: 'https://placehold.co/600x400',
     },
