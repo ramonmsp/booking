@@ -3,7 +3,6 @@ import React from 'react';
 import { Typography } from 'antd';
 import useStyles from './use_styles';
 
-
 const Home = () => {
   const styles = useStyles();
 

@@ -15,18 +15,18 @@ describe('edit booking flow', () => {
     cy.contains('Bookings').click();
     cy.url().should('include', '/bookings');
 
-    cy.get('.ant-table-row').contains('March 27, 2024').should('be.visible');
+    cy.get('.ant-table-row').contains('August 16, 2024').should('be.visible');
     cy.get('a[href="bookings/edit/1"]').click();
 
     cy.get('.ant-picker-range').click();
     cy.get('.ant-picker-panel-container').within(() => {
-      cy.get('[title="2024-04-16"]').click();
-      cy.get('[title="2024-04-20"]').click();
+      cy.get('[title="2024-08-21"]').click();
+      cy.get('[title="2024-08-23"]').click();
     });
 
     cy.contains('Update booking').click();
 
-    cy.get('.ant-table-row').contains('March 27, 2024').should('not.exist');
-    cy.get('.ant-table-row').contains('April 16, 2024').should('be.visible');
+    cy.get('.ant-table-row').contains('July 16, 2024').should('not.exist');
+    cy.get('.ant-table-row').contains('August 21, 2024').should('be.visible');
   });
 });

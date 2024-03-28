@@ -1,26 +1,17 @@
-'use client';
+'use client'
 import { Button, Space, Table, TableProps } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Booking } from '../lib/mocks/booking';
 import dayjs from 'dayjs';
-import { getBookings } from '../utils/requests';
+import { BASE_URL, useGetBookings } from '../utils/requests';
 import React from 'react';
 import Link from 'next/link';
 
-const BookingsPage: React.FC = () => {
-  const [bookings, setBookings] = React.useState<Booking[]>([]);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const bookings = await getBookings();
-        setBookings(bookings);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
+const BookingsPage: React.FC = () => {
+
+  const { bookings, mutate } = useGetBookings<Booking[]>(`${BASE_URL}/bookings`);
+  mutate();
 
   const columns: TableProps['columns'] = [
     {

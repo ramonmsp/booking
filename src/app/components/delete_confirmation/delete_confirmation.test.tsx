@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { generateBooking, generateProperty } from '@/test/helpers/factories';
 import { DeleteConfirmation } from './delete_confirmation';
 import { Booking } from '@/app/lib/mocks/booking';
@@ -14,11 +14,9 @@ describe('components/DeleteConfirmation', () => {
   it('should render delete modal correctly', () => {
     render(
       <DeleteConfirmation
-        open={true}
-        handleOpen={() => {}}
         booking={booking}
         onCancel={() => {}}
-        onOk={() => {}}
+        onFinish={() => {}}
       />,
     );
     expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
@@ -28,11 +26,9 @@ describe('components/DeleteConfirmation', () => {
     const onCancel = jest.fn();
     render(
       <DeleteConfirmation
-        open={true}
-        handleOpen={() => {}}
         booking={booking}
         onCancel={onCancel}
-        onOk={() => {}}
+        onFinish={() => {}}
       />,
     );
     const cancelButton = screen.getByRole('button', { name: /Cancel/ });
@@ -40,19 +36,18 @@ describe('components/DeleteConfirmation', () => {
     expect(onCancel).toHaveBeenCalled();
   });
 
-  it('should calls onOk function', () => {
-    const onOk = jest.fn();
+  it('should calls onFinish function', () => {
+    const onFinish = jest.fn();
+
     render(
       <DeleteConfirmation
-        open={true}
-        handleOpen={() => {}}
         booking={booking}
         onCancel={() => {}}
-        onOk={onOk}
+        onFinish={onFinish}
       />,
     );
-    const okButton = screen.getByRole('button', { name: /OK/ });
-    okButton.click();
-    expect(onOk).toHaveBeenCalled();
+
+    fireEvent.click(screen.getByTestId('submit-button-delete'));
+    expect(onFinish).toHaveBeenCalled();
   });
 });

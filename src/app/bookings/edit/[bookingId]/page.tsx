@@ -1,8 +1,15 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import BookingForm, { DatePickedRange } from '@/app/components/booking_form/booking_form';
-import { editBooking, getBookings } from '@/app/utils/requests';
+import BookingForm, {
+  DatePickedRange,
+} from '@/app/components/booking_form/booking_form';
+import {
+  BASE_URL,
+  useEditBooking,
+  useGetBookingById,
+  useGetBookings,
+} from '@/app/utils/requests';
 import { Booking } from '@/app/lib/mocks/booking';
 
 export type DateRange = {
@@ -24,31 +31,11 @@ const EditBooking = ({ params }: EditBookingProps) => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const { bookingId } = params;
+  const updateBooking = useEditBooking(`${BASE_URL}/bookings/${bookingId}`);
 
-  const [property, setProperty] = React.useState<
-    Booking | NonNullable<unknown>
-  >({});
-  const [bookings, setBookings] = React.useState<Booking[]>([]);
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const bookings = await getBookings();
-        const booking = bookings?.find(
-          ({ bookingId }: { bookingId: string }) => bookingId === bookingId,
-        );
-
-        setProperty(booking);
-        setBookings(
-          bookings.filter(({ id }: { id: string }) => id !== bookingId),
-        );
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, [bookingId, setProperty, setBookings]);
+  const { booking } = useGetBookingById(`${BASE_URL}/bookings/${bookingId}`);
+  const { bookings } = useGetBookings<Booking[]>(`${BASE_URL}/bookings/`);
+  const otherBookings = bookings?.filter(({ id }) => id !== bookingId);
 
   const handleOpen = React.useCallback((open: boolean) => {
     setOpen(open);
@@ -60,15 +47,25 @@ const EditBooking = ({ params }: EditBookingProps) => {
   }, [router]);
 
   const onFinish = async (values: DatePickedRange) => {
-    await editBooking(values, bookingId);
+    const { bookingDates } = values;
+    const [start, end] = bookingDates;
+
+    const startDate = new Date(start.toLocaleString());
+    const endDate = new Date(end.toLocaleString());
+    const booking = {
+      start: startDate,
+      end: endDate,
+    } as Partial<Booking>;
+
+    updateBooking.trigger(booking);
     setOpen(false);
     router.push('/bookings');
   };
 
   return (
     <BookingForm
-      property={property!}
-      bookings={bookings ?? []}
+      property={booking as Partial<Booking>}
+      bookings={otherBookings ?? []}
       onCancel={handleCancel}
       onFinish={onFinish}
       open={open}

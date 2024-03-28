@@ -5,9 +5,10 @@ import BookingForm, {
   DatePickedRange,
 } from '@/app/components/booking_form/booking_form';
 import {
-  createBooking,
-  getBookings,
-  getPropertyById,
+  BASE_URL,
+  useGetPropertyById,
+  useGetBookings,
+  useCreateBooking,
 } from '@/app/utils/requests';
 import { Booking } from '@/app/lib/mocks/booking';
 import { Dayjs } from 'dayjs';
@@ -31,25 +32,13 @@ const NewBooking = ({ params }: NewBookingProps) => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const { propertyId } = params;
+  const createBooking = useCreateBooking(`${BASE_URL}/bookings`);
 
-  const [property, setProperty] = React.useState<Partial<Booking>>({});
-  const [bookings, setBookings] = React.useState<Booking[]>([]);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const propertyData = await getPropertyById(propertyId);
-        setProperty(propertyData);
-
-        const bookingsData = await getBookings();
-        setBookings(bookingsData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, [setBookings, propertyId]);
+  const { property } = useGetPropertyById(
+    `${BASE_URL}/properties/${propertyId}`
+  );
+  const { bookings } = useGetBookings<Booking[]>(`${BASE_URL}/bookings`);
 
   const propertyData = { property: property } as Partial<Booking>;
 
@@ -63,7 +52,19 @@ const NewBooking = ({ params }: NewBookingProps) => {
   }, [router]);
 
   const onFinish = (values: DatePickedRange) => {
-    createBooking(values, propertyId);
+    const { bookingDates } = values;
+    const [start, end] = bookingDates;
+
+    const startDate = new Date(start.toLocaleString());
+    const endDate = new Date(end.toLocaleString());
+
+    const booking = {
+      start: startDate,
+      end: endDate,
+      property,
+    } as Partial<Booking>;
+
+    createBooking.trigger(booking);
     setOpen(false);
     router.push('/bookings');
   };

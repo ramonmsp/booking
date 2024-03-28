@@ -38,6 +38,7 @@ export async function DELETE(req: Request, context: GetServerSidePropsContext) {
 
   try {
     deleteById(params?.id as string);
+    
     return NextResponse.json({
       status: 200,
       statusText: 'booking has been deleted',

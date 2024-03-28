@@ -1,38 +1,47 @@
 import { Booking } from '@/app/lib/mocks/booking';
-import { Modal, Typography } from 'antd';
+import { Button, Flex, Modal, Typography } from 'antd';
 import React from 'react';
 
 interface DeleteConfirmationProps {
-  open: boolean;
-  handleOpen: (open: boolean) => void;
   booking: Booking;
   onCancel?: () => void;
-  onOk?: () => void;
+  onFinish?: () => void;
 }
 
 export const DeleteConfirmation = ({
-  open,
-  handleOpen,
   booking,
   onCancel,
-  onOk,
+  onFinish,
 }: DeleteConfirmationProps) => {
-  const { property } = booking;
-  React.useEffect(() => {
-    handleOpen(true);
-  }, [handleOpen]);
+  const handleClick = () => {
+    onFinish?.();
+    onCancel?.();
+  };
+
+  const Footer = () => (
+    <Flex gap="small" justify="flex-end">
+      <Button onClick={onCancel}>Cancel</Button>
+      <Button
+        type="primary"
+        onClick={handleClick}
+        data-testid="submit-button-delete"
+      >
+        OK
+      </Button>
+    </Flex>
+  );
 
   return (
     <Modal
       title="Delete Booking"
-      open={open}
+      open={booking && true}
       onCancel={onCancel}
-      onOk={onOk}
+      footer={<Footer />}
       data-testid="delete-modal"
     >
       <Typography.Text>
         Are you sure you want to delete your reservation at{' '}
-        <Typography.Text strong>{property?.location}?</Typography.Text>
+        <Typography.Text strong>{booking?.property?.location}?</Typography.Text>
       </Typography.Text>
     </Modal>
   );

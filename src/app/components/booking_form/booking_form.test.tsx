@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 /* 
   since I have been facing some ant design date picker manipulation
   with Jest/RTL issues, I decided to move it verifications to flow page 
-  tests.
+  Cypress tests.
 */ 
 describe('components/BookingForm', () => {
   it('should render booking form correctly', () => {

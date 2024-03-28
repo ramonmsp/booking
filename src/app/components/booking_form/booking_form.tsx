@@ -48,11 +48,11 @@ const BookingForm = ({
   const initialValues = React.useMemo(() => {
     return {
       bookingDates:
-        property.start && property.end
+        property && property.start && property.end
           ? [dayjs(property.start), dayjs(property.end)]
           : [],
     };
-  }, [property?.start, property?.end]);
+  }, [property]);
 
   React.useEffect(() => {
     form?.setFieldsValue(initialValues);
@@ -75,7 +75,7 @@ const BookingForm = ({
         style={{ maxWidth: 600 }}
       >
         <Form.Item
-          label={`Check-in and Check-out dates to ${property.property?.location}`}
+          label={`Check-in and Check-out dates to ${property?.property?.location}`}
           name="bookingDates"
           initialValue={initialValues.bookingDates}
           rules={[

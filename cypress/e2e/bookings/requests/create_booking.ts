@@ -11,8 +11,8 @@ export const createBooking = (BASE_URL: string) => {
           description: 'Salvador is a city in Brazil',
           imageUrl: 'https://source.unsplash.com/1600x900/?salvador',
         },
-        startDate: '2024-08-16',
-        endDate: '2024-08-20',
+        start: '2024-08-16',
+        end: '2024-08-20',
       },
     }).its('status').should('eq', 200);
 };

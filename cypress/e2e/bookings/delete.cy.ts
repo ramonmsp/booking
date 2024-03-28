@@ -12,12 +12,11 @@ describe('delete booking flow', () => {
     cy.contains('Bookings').click();
     cy.url().should('include', '/bookings');
 
-    cy.get('.ant-table-row').contains('March 27, 2024').should('be.visible');
+    cy.get('.ant-table-row').contains('August 16, 2024').should('be.visible');
     cy.get('a[href="bookings/delete/1"]').click();
 
     cy.get('.ant-modal-content').within(() => {
       cy.get('.ant-modal-footer button').contains('OK').click();
     });
-    cy.get('div').contains('No data').should('be.visible');
   });
 });

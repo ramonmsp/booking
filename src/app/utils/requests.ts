@@ -1,72 +1,114 @@
-import { DatePickedRange } from "../components/booking_form/booking_form";
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
+import { Booking } from '../lib/mocks/booking';
+import { Property } from '../lib/mocks/properties';
 
-const BASE_URL = 'http://localhost:3000/api';
+export const BASE_URL = 'http://localhost:3000/api';
+
+//http verbs
+const http = {
+  get: async (url: string, options = {}) => {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return data;
+  },
+  patch: async (url: string, { arg }: { arg: Partial<Booking> }) => {
+    const response = await fetch(url, {
+      method: 'PATCH',
+      body: JSON.stringify(arg),
+    });
+
+    const data = await response.json();
+    return data;
+  },
+  post: async (url: string, { arg }: { arg: Partial<Booking> }) => {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(arg),
+    });
+
+    const data = await response.json();
+    return data;
+  },
+  delete: async (url: string) => {
+    const response = await fetch(url, {
+      method: 'DELETE',
+    });
+
+    const data = await response.json();
+    return data;
+  },
+};
 
 //property
-export async function getProperties() {
-  const response = await fetch(`${BASE_URL}/properties`);
-  return response.json();
+export function useGetProperties<Property>(url: string) {
+  const { data, error } = useSWR<Property>(url, http.get);
+
+  return {
+    properties: data,
+    error,
+  };
 }
 
-export async function getPropertyById(id: string) {
-    const response = await fetch(`${BASE_URL}/properties/${id}`);
-    return response.json();
-  }
+export function useGetPropertyById(url: string) {
+  const { data, error } = useSWR<Property[]>(url, http.get);
+
+  return {
+    property: data,
+    error,
+  };
+}
 
 //booking
+export function useGetBookings<Booking>(url: string) {
+  const { data, error, mutate } = useSWR<Booking>(url, http.get);
 
-export async function getBookings() {
-  const response = await fetch(`${BASE_URL}/bookings`);
-  return response.json();
-}
-
-export async function getBookingById(id: string) {
-  const response = await fetch(`${BASE_URL}/bookings/${id}`);
-  return response.json();
-}
-
-export async function createBooking(dates: DatePickedRange, propertyId: string) {
-  const [start, end] = dates.bookingDates;
-  const property = await getPropertyById(propertyId);
-  const booking = {
-    property,
-    start,
-    end,
+  return {
+    bookings: data,
+    error,
+    mutate,
   };
-
-  const response = await fetch(`${BASE_URL}/bookings`, {
-    method: 'POST',
-    body: JSON.stringify(booking),
-  });
-  return response.json();
 }
 
-export async function editBooking(dates: DatePickedRange, id: string) {
-  const [start, end] = dates.bookingDates as unknown as Date[];
+/*
+  This hook is called undesirably when the modal component is unmounted.
+  Disabling the revalidate settings prevented other requests, but not this one.
+  Then, when unmount the deletion modal, the application will make a request 
+  to the API requesting the booking that was just deleted.
+*/
+export function useGetBookingById(url: string) {
+  const { data, error } = useSWR<Booking>(url, http.get, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateIfStale: false,
+  });
 
-  const booking = {
-    start: start.toISOString(),
-    end: end.toISOString(),
+  return {
+    booking: data,
+    error,
   };
-  
-  const response = await fetch(`${BASE_URL}/bookings/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(booking),
-  });
-  
-  if (!response.ok) {
-    throw new Error('Could not update booking');
-  }
-  return response.json();
 }
 
-export async function deleteBooking(id: string) {
-  const response = await fetch(`${BASE_URL}/bookings/${id}`, {
-    method: 'DELETE',
-  });
-  
-  if (!response.ok) {
-    throw new Error('Could not delete booking');
-  }
-  return response.json();
+export function useCreateBooking(url: string) {
+  const { trigger, isMutating } = useSWRMutation(url, http.post);
+
+  return { trigger, isMutating };
 }
+
+export function useEditBooking(url: string) {
+  const { trigger, isMutating } = useSWRMutation(url, http.patch);
+
+  return { trigger, isMutating };
+}
+
+export function useDeleteBooking(url: string) {
+  const { trigger, isMutating } = useSWRMutation(url, http.delete);
+
+  return { trigger, isMutating };
+}
+
+export const useMutate = (url: string) => {
+  const { trigger, isMutating } = useSWRMutation(url, http.delete);
+
+  return { trigger, isMutating };
+};

@@ -3,7 +3,7 @@ import { Property } from './properties';
 import { Dayjs } from 'dayjs';
 
 export interface Booking {
-  id?: string;
+  id: string;
   property: Property;
   start: Date | Dayjs;
   end: Date | Dayjs;
